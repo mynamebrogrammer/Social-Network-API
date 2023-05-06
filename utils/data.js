@@ -1,15 +1,19 @@
 const users = [
-  { id: 1, name: 'John' },
-  { id: 2, name: 'Jane' },
-  { id: 3, name: 'Mario' },
-  { id: 4, name: 'Kate' },
-  { id: 5, name: 'Alex' },
+  { id: 1, username: 'John', email: 'rando@email.com' },
+  { id: 2, username: 'Jane', email: 'lern@email.com' },
+  { id: 3, username: 'Mario', email: 'user@email.com' },
+  { id: 4, username: 'Kate', email: 'teach@email.com' },
+  { id: 5, username: 'Alex', email: 'lerner@email.com' },
 ];
 
 const thoughts = [
-  { id: 1, text: 'Hello World', userId: 1 },
-  { id: 2, text: 'Lorem ipsum', userId: 2 },
-  { id: 3, text: 'I wonder if this works', userId: 3 },
+  { id: 1, thoughtText: 'Hello World', userId: 1 },
+  { id: 2, thoughtText: 'Lorem ipsum', userId: 2 },
+  { id: 3, thoughtText: 'I wonder if this works', userId: 3 },
+  { id: 4, thoughtText: 'I am a teacher', userId: 4 },
+  { id: 5, thoughtText: 'I am a student', userId: 5 },
+  { id: 6, thoughtText: 'I am a student', userId: 5 },
+  { id: 7, thoughtText: 'I am a student', userId: 5 },
 ];
 
 const getUser = (id) => {

@@ -53,8 +53,12 @@ connection.once('open', async () => {
     await thought.save();
   } 
 
-  console.log('Updated all thoughts with reactions');
+  await User.collection.insertMany(users);
+  await Thought.collection.insertMany(thoughts);
 
+  console.log(users);
+  console.log(thoughts);
+  console.log('All done!');
 
   process.exit(0);
 });
