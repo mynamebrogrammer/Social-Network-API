@@ -3,21 +3,20 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "license": "MIT",
+  "license": "ISC",
   "scripts": {
     "start": "node server.js",
-    "seed": "node utils/seed.js",
-    "dev": "nodemon index.js"
+    "watch": "nodemon server.js",
+    "seed": "node utils/seed.js"
   },
   "repository": {
     "type": "git",
     "url": "mynamebrogrammer"
   },
   "author": "Habib Maksoud",
-  "license": "ISC",
-
   "dependencies": {
     "express": "^4.17.1",
-    "mongodb": "^4.5.0"
+    "mongodb": "^4.5.0",
+    "nodemon": "^2.0.22"
   }
 }
