@@ -26,6 +26,14 @@ const thoughtController = {
     async createThought(req, res){
         try {
             const ThoughtData = await Thought.create(req.body);
+            const UserData = await User.findOneAndUpdate(
+                {_id: req.body.userId},
+                {$push: {thoughts: ThoughtData._id}},
+                {new: true}
+            );
+            if (!UserData) {
+                return res.status(404).json({message: 'No user with this id'});
+            }
             res.json(ThoughtData);
         } catch (err) {
             console.log(err);
