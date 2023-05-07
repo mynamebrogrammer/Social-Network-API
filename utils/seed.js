@@ -1,61 +1,42 @@
-const connection = require('../config/connection');
-const {User, Thought} = require('../models');
-const {getUser, getThoughts} = require('../utils/data');
+const connection = require("../config/connection");
+const { User, Thought } = require("../models");
+const { users, thoughts } = require("../utils/data");
 
-connection.on('error', (err) => err);
+connection.on("error", (err) => err);
 
-connection.once('open', async () => {
-  console.log('Connected to database');
+connection.once("open", async () => {
+  console.log("Connected to database");
 
   await User.deleteMany({});
   await Thought.deleteMany({});
-  console.log('Deleted all users and thoughts');
 
-  // create empty arrays to hold all users and thoughts
-
-  const users = [];
-  const thoughts = [];
-
-// after deleting all users and thoughts, create new users and thoughts by holding them in the arrays above
-
-  for (let i = 0; i < 5; i++) {
-    const user = await User.create(getUser(i + 1));
-    users.push(user);
+  // Delete all reactions from each thought
+  for (const thought of thoughts) {
+    thought.reactions = [];
   }
 
-  for (let i = 0; i < 3; i++) {
-    const thought = await Thought.create(getThoughts(i + 1));
-    thoughts.push(thought);
+  // Create users and thoughts
+  for (const user of users) {
+    const createdUser = await User.create(user);
+    const userThoughts = thoughts.filter((thought) => thought.userId === user.id);
+    for (const thought of userThoughts) {
+      thought.username = createdUser.username;
+      thought.userId = createdUser.id;
+    }
+    const createdThoughts = await Thought.insertMany(userThoughts);
+    createdUser.thoughts = createdThoughts.map((thought) => thought.id);
+    await createdUser.save();
   }
 
-  console.log('Created all users and thoughts');
+  // Update friends for each user
+  for (const user of users) {
+    const createdUser = await User.findOne({ username: user.username });
+    const userFriends = users.find((u) => u.id === user.id).friends;
+    const friends = await User.find({ username: { $in: userFriends } });
+    createdUser.friends = friends.map((friend) => friend.id);
+    await createdUser.save();
+  }
 
-  // update the users with thoughts
-
-  for (let i = 0; i < 3; i++) {
-    const user = users[i];
-    const thought = thoughts[i];
-    user.thoughts.push(thought);
-    await user.save();
-  } 
-
-  console.log('Updated all users with thoughts');
-
-  // update the thoughts with reactions
-
-  for (let i = 0; i < 3; i++) {
-    const thought = thoughts[i];
-    const user = users[i];
-    thought.reactions.push({
-      reactionBody: 'This is a reaction',
-      username: user.username,
-    });
-    await thought.save();
-  } 
-
-  console.log('Updated all thoughts with reactions');
-
-
+  console.log("Done seeding database");
   process.exit(0);
 });
-
