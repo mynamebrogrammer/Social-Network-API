@@ -8,4 +8,6 @@ connect(connectionString, {
   useUnifiedTopology: true,
 });
 
+console.log('Connected to MongoDB database');
+
 module.exports = connection;

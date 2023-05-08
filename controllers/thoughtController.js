@@ -26,7 +26,10 @@ const thoughtController = {
     try {
       const ThoughtData = await Thought.create(req.body);
 
+      const UserData = await User.findOneAndUpdate(
+      );
       console.log(`Thought created for ${UserData.username}`);
+      res.json(ThoughtData);
     } catch (err) {
       console.log(err);
       res.status(500).json(err);
@@ -63,6 +66,38 @@ const thoughtController = {
       res.status(500).json(err);
     }
   },
+  async addReaction(req, res) {
+    try {
+      const ThoughtData = await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $push: { reactions: req.body } },
+        { new: true }
+      );
+      if (!ThoughtData) {
+        return res.status(404).json({ message: "No thought with this id" });
+      }
+      res.json(ThoughtData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+  async deleteReaction(req, res) {
+    try {
+      const ThoughtData = await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { new: true }
+      );
+      if (!ThoughtData) {
+        return res.status(404).json({ message: "No thought with this id" });
+      }
+      res.json(ThoughtData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  }
 };
 
 module.exports = thoughtController;
