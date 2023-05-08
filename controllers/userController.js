@@ -38,6 +38,7 @@ const userController = {
         { $set: req.body },
         { new: true }
       );
+      res.json(userData);
       console.log(`successfully updated ${userData.username}`, userData);
       if (!userData) {
         return res.status(404).json({ message: "No user with this id" });
